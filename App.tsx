@@ -171,9 +171,9 @@ const App: React.FC = () => {
   };
 
   const handleClearAllVehicles = () => {
-    if (vehicles.length > 0 && window.confirm('Are you sure you want to clear all vehicle numbers?')) {
-      setVehicles([]);
-    }
+    if (vehicles.length === 0) return;
+    setVehicles([]);
+    showToast('All vehicle numbers cleared.');
   };
 
   const generateReportText = useCallback((): string => {
@@ -363,17 +363,14 @@ ${vehicleList.length > 0 ? vehicleList : 'No vehicles listed.'}
               </span>
             </div>
 
-            {/* Admin Logo Button (Credentials hidden) */}
+            {/* Admin Logo Button (Only Logo, text removed) */}
             <button
               onClick={handleAdminLogoClick}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-gray-800 to-gray-800/80 hover:from-indigo-900/60 hover:to-indigo-800/60 border border-indigo-500/40 hover:border-indigo-400 text-indigo-300 text-xs font-semibold rounded-xl shadow-md transition-all active:scale-95 group"
+              className="w-9 h-9 rounded-xl bg-gray-850 hover:bg-indigo-600/30 border border-indigo-500/40 hover:border-indigo-400 text-indigo-400 hover:text-white flex items-center justify-center shadow-md transition-all active:scale-95"
               title="Admin Portal"
+              aria-label="Admin Portal"
             >
-              <div className="w-5 h-5 rounded-lg bg-indigo-600/30 flex items-center justify-center text-indigo-400 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-                <i className="fa-solid fa-user-shield text-[11px]"></i>
-              </div>
-              <span>{isAdminLoggedIn ? 'Admin Portal' : 'Admin'}</span>
-              <i className="fa-solid fa-chevron-right text-[9px] opacity-70"></i>
+              <i className="fa-solid fa-user-shield text-sm"></i>
             </button>
           </div>
 
@@ -448,8 +445,18 @@ ${vehicleList.length > 0 ? vehicleList : 'No vehicles listed.'}
                   value={vehicleInput}
                   onChange={(e) => setVehicleInput(e.target.value)}
                   placeholder="Enter Vehicle No. (e.g. 6115, 3925)"
-                  className="w-full bg-gray-800 border border-gray-700 rounded-xl pl-8 pr-3 py-2 text-xs sm:text-sm text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-mono"
+                  className="w-full bg-gray-800 border border-gray-700 rounded-xl pl-8 pr-8 py-2 text-xs sm:text-sm text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-mono"
                 />
+                {vehicleInput && (
+                  <button
+                    type="button"
+                    onClick={() => setVehicleInput('')}
+                    className="absolute right-2.5 top-2.5 text-xs text-gray-400 hover:text-white p-1"
+                    title="Clear input"
+                  >
+                    <i className="fa-solid fa-xmark"></i>
+                  </button>
+                )}
               </div>
               <button
                 type="submit"
@@ -466,10 +473,13 @@ ${vehicleList.length > 0 ? vehicleList : 'No vehicles listed.'}
                 <span>Listed Vehicles ({vehicles.length})</span>
                 {vehicles.length > 0 && (
                   <button
+                    type="button"
                     onClick={handleClearAllVehicles}
-                    className="text-red-400 hover:text-red-300 text-[10px]"
+                    className="text-red-400 hover:text-red-300 hover:bg-red-950/60 px-2 py-0.5 rounded transition-colors flex items-center gap-1 active:scale-95"
+                    title="Clear all vehicles"
                   >
-                    Clear All
+                    <i className="fa-solid fa-trash-can text-[10px]"></i>
+                    <span>Clear All</span>
                   </button>
                 )}
               </div>
@@ -589,16 +599,9 @@ ${vehicleList.length > 0 ? vehicleList : 'No vehicles listed.'}
             </button>
           </div>
 
-          {/* Bottom helper info */}
-          <div className="pt-2 border-t border-gray-850 flex items-center justify-between text-[11px] text-gray-500">
-            <span>RFL Khulna Depot</span>
-            <button
-              onClick={handleAdminLogoClick}
-              className="text-indigo-400 hover:underline flex items-center gap-1"
-            >
-              <i className="fa-solid fa-lock text-[10px]"></i>
-              <span>Admin Records & Excel</span>
-            </button>
+          {/* Bottom footer */}
+          <div className="pt-2 border-t border-gray-850/80 text-center text-[11px] text-gray-500">
+            <span>RFL Distribution • Khulna Depot - 16531</span>
           </div>
 
         </div>

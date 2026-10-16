@@ -139,7 +139,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
       .filter((v) => v.length > 0);
 
     if (vList.length === 0) {
-      alert('Please enter at least one vehicle number.');
+      showToast('Please enter at least one vehicle number.');
       return;
     }
 
@@ -195,7 +195,7 @@ ${vList.map((v, i) => `${i + 1}) ${v}`).join('\n')}
       await navigator.clipboard.writeText(text);
       showToast('Report text copied to clipboard!');
     } catch {
-      alert('Failed to copy text.');
+      showToast('Failed to copy text.');
     }
   };
 
@@ -331,10 +331,8 @@ ${vList.map((v, i) => `${i + 1}) ${v}`).join('\n')}
               {records.length > 0 && (
                 <button
                   onClick={() => {
-                    if (window.confirm('Are you sure you want to delete all daily records? This action cannot be undone.')) {
-                      onClearAllRecords();
-                      showToast('All daily records have been cleared.');
-                    }
+                    onClearAllRecords();
+                    showToast('All daily records have been cleared.');
                   }}
                   className="text-xs text-red-400 hover:text-red-300 px-3 py-1.5 rounded-lg border border-red-800/50 hover:bg-red-950/40 transition-colors"
                 >
@@ -679,13 +677,11 @@ ${vList.map((v, i) => `${i + 1}) ${v}`).join('\n')}
                           <button
                             onClick={() => {
                               if (staffList.length <= 1) {
-                                alert('At least one staff member must remain in the directory.');
+                                showToast('At least one staff member must remain in the directory.');
                                 return;
                               }
-                              if (window.confirm(`Are you sure you want to remove "${staff.name}"?`)) {
-                                onDeleteStaff(staff.id);
-                                showToast(`Staff member "${staff.name}" removed.`);
-                              }
+                              onDeleteStaff(staff.id);
+                              showToast(`Staff member "${staff.name}" removed.`);
                             }}
                             className="px-2 py-1 bg-red-900/30 hover:bg-red-800/50 text-red-400 rounded border border-red-700/50 text-[11px]"
                             title="Delete"
